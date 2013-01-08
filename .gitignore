@@ -1,0 +1,6 @@
+*.suo
+*.csproj.user
+bin
+obj
+S2MuninSetup/Debug
+S2MuninSetup/Release
