@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace S2.Munin.Plugins.Core
 {
@@ -12,15 +13,29 @@ namespace S2.Munin.Plugins.Core
         // is TCP used in old systems?
         internal static readonly string[] categories = { "TCP", "TCPv4", "TCPv6" };
 
+        private bool logarithmicGraph = true;
+
         List<PerformanceCounter> activeConnectionCounterList = new List<PerformanceCounter>();
         List<PerformanceCounter> establishedConnectionCounterList = new List<PerformanceCounter>();
         List<PerformanceCounter> failedConnectionCounterList = new List<PerformanceCounter>();
         List<PerformanceCounter> passiveConnectionCounterList = new List<PerformanceCounter>();
         List<PerformanceCounter> resetConnectionCounterList = new List<PerformanceCounter>();
 
-        public Netstat()
+        public Netstat(bool logarithmic, string categoriesToCheck)
         {
-            foreach (string categoryName in categories)
+            this.logarithmicGraph = logarithmic;
+
+            string [] categoryArray;
+            if (string.IsNullOrEmpty(categoriesToCheck))
+            {
+                categoryArray = categories;
+            }
+            else
+            {
+                categoryArray = Regex.Split(categoriesToCheck, "\\s*,\\s*");
+            }
+
+            foreach (string categoryName in categoryArray)
             {
                 if (!PerformanceCounterCategory.Exists(categoryName))
                 {
@@ -61,13 +76,12 @@ namespace S2.Munin.Plugins.Core
             }
         }
 
-
         public string GetConfiguration(string graphName)
         {
             StringBuilder configuration = new StringBuilder();
-            
+
             configuration.Append("graph_title Netstat\n");
-            configuration.Append("graph_args --base 1000 --logarithmic\n");
+            configuration.AppendFormat("graph_args --base 1000{0}\n", this.logarithmicGraph ? " --logarithmic" : "");
             configuration.Append("graph_vlabel active connections\n");
             configuration.Append("graph_category network\n");
             configuration.Append("graph_info This graph shows the TCP activity of all the network interfaces combined\n");

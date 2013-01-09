@@ -15,7 +15,7 @@ namespace S2.Munin.Service
         public ProjectInstaller()
         {
             InitializeComponent();
-            this.S2MuninServiceProcessInstaller.Committed += serviceInstallerService1_Committed;
+            this.S2MuninServiceProcessInstaller.Committed += new InstallEventHandler(serviceInstallerService1_Committed);
         }
 
         private void serviceProcessInstaller1_AfterInstall(object sender, InstallEventArgs e)
@@ -27,7 +27,7 @@ namespace S2.Munin.Service
         {
             var serviceInstaller = sender as ServiceInstaller;
             // Start the service after it is installed.
-            if (serviceInstaller != null && serviceInstaller.StartType == ServiceStartMode.Automatic)
+            if (serviceInstaller != null)
             {
                 var serviceController = new ServiceController(serviceInstaller.ServiceName);
                 serviceController.Start();

@@ -19,6 +19,20 @@ namespace S2.Munin.Plugins.Core
 
         public bool Initialize(IDictionary<string, string> settings)
         {
+            // configuration values
+            bool netstatLogarithmic = true;
+            string netstatCategories = null;
+            if (settings != null)
+            {
+                if (settings.ContainsKey("netstat-logarithmic"))
+                {
+                    bool.TryParse(settings["netstat-logarithmic"], out netstatLogarithmic);
+                }
+                if (settings.ContainsKey("netstat-categories"))
+                {
+                    netstatCategories = settings["netstat-categories"];
+                }
+            }
             // single graph delegates
             Cpu cpu = new Cpu();
             configurationDelegates.Add("cpu", cpu.GetConfiguration);
@@ -39,7 +53,7 @@ namespace S2.Munin.Plugins.Core
             configurationDelegates.Add("processes", processes.GetConfiguration);
             valueDelegates.Add("processes", processes.GetValues);
             enabledGraphs.Add("processes");
-            Netstat netstat = new Netstat();
+            Netstat netstat = new Netstat(netstatLogarithmic, netstatCategories);
             configurationDelegates.Add("netstat", netstat.GetConfiguration);
             valueDelegates.Add("netstat", netstat.GetValues);
             enabledGraphs.Add("netstat");
