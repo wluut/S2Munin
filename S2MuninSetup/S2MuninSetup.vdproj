@@ -15,8 +15,26 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_08081C513FF0721F971498C564E6E1F6"
+        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_08081C513FF0721F971498C564E6E1F6"
+        "OwnerKey" = "8:_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
         "OwnerKey" = "8:_8C55BB0E1DB5449093458C320FD24372"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,12 +51,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
-        "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_8C55BB0E1DB5449093458C320FD24372"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -47,6 +59,18 @@
         {
         "MsmKey" = "8:_914326C39CF448189FA287387F18B82B"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+        "OwnerKey" = "8:_DD8C11A6C1A577C545B301B0E2A6C092"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -69,8 +93,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_DD8C11A6C1A577C545B301B0E2A6C092"
+        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C40045EB84FA4FB8A15B8B65B16C0648"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -82,13 +118,25 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
+        "OwnerKey" = "8:_DD8C11A6C1A577C545B301B0E2A6C092"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C40045EB84FA4FB8A15B8B65B16C0648"
+        "OwnerKey" = "8:_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_08081C513FF0721F971498C564E6E1F6"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -167,10 +215,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 und x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -264,6 +312,37 @@
         }
         "File"
         {
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_08081C513FF0721F971498C564E6E1F6"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Management.Infrastructure.Native, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=x86"
+                "ScatterAssemblies"
+                {
+                    "_08081C513FF0721F971498C564E6E1F6"
+                    {
+                    "Name" = "8:Microsoft.Management.Infrastructure.Native.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Management.Infrastructure.Native.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_AF39E661FCE144DF9FF2315C259C3679"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_39056CC5A657978C5F88396C589D891F"
             {
             "AssemblyRegister" = "3:1"
@@ -278,6 +357,68 @@
                     }
                 }
             "SourcePath" = "8:S2MuninPlugin.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_AF39E661FCE144DF9FF2315C259C3679"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:Microsoft.Management.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_93C59A8CFD6FAA9FE47CCF19C49CB08B"
+                    {
+                    "Name" = "8:Microsoft.Management.Infrastructure.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Microsoft.Management.Infrastructure.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_AF39E661FCE144DF9FF2315C259C3679"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_DD8C11A6C1A577C545B301B0E2A6C092"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:System.Management.Automation, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_DD8C11A6C1A577C545B301B0E2A6C092"
+                    {
+                    "Name" = "8:System.Management.Automation.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.Management.Automation.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_AF39E661FCE144DF9FF2315C259C3679"
@@ -363,7 +504,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:S2 Munin"
         "ProductCode" = "8:{0734F6D4-9B8D-4AC5-B25F-EFB9EEC07D2E}"
-        "PackageCode" = "8:{29FECAAE-B532-4FD6-92DA-1739CDFA169B}"
+        "PackageCode" = "8:{154BB752-38C9-45E3-9A67-29D566946F7D}"
         "UpgradeCode" = "8:{1A3FDA09-07E1-446C-A9C7-9BAB55C8FA74}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
