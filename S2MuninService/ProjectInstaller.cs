@@ -15,16 +15,13 @@ namespace S2.Munin.Service
         public ProjectInstaller()
         {
             InitializeComponent();
-            this.S2MuninServiceProcessInstaller.Committed += new InstallEventHandler(serviceInstallerService1_Committed);
+            this.S2MuninServiceProcessInstaller.BeforeUninstall += new InstallEventHandler(serviceInstallerService1_Uninstall);
         }
 
         private void serviceProcessInstaller1_AfterInstall(object sender, InstallEventArgs e)
         {
+            S2.Munin.Plugin.Logger.RegisterApplication();
 
-        }
-
-        private void serviceInstallerService1_Committed(object sender, InstallEventArgs e)
-        {
             var serviceInstaller = sender as ServiceInstaller;
             // Start the service after it is installed.
             if (serviceInstaller != null)
@@ -32,6 +29,11 @@ namespace S2.Munin.Service
                 var serviceController = new ServiceController(serviceInstaller.ServiceName);
                 serviceController.Start();
             }
+        }
+
+        private void serviceInstallerService1_Uninstall(object sender, InstallEventArgs e)
+        {
+            S2.Munin.Plugin.Logger.UnRegisterApplication();
         }
     }
 }

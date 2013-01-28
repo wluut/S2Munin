@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -30,7 +31,21 @@ namespace S2.Munin.Service
 
             foreach (FileInfo pluginFile in plugins)
             {
-                Type[] types = Assembly.LoadFile(pluginFile.FullName).GetTypes();
+                Type[] types;
+                try
+                {
+                    types = Assembly.LoadFile(pluginFile.FullName).GetTypes();
+                }
+                catch (IOException ioe)
+                {
+                    Logger.Error("could not load plugin " + pluginFile.Name, ioe);
+                    continue;
+                }
+                catch (BadImageFormatException bife)
+                {
+                    Logger.Error("could not load plugin " + pluginFile.Name, bife);
+                    continue;
+                }
 
                 foreach (Type type in types)
                 {

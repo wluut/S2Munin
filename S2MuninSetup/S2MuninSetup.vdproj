@@ -27,25 +27,25 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "OwnerKey" = "8:_8C55BB0E1DB5449093458C320FD24372"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -106,18 +106,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C40045EB84FA4FB8A15B8B65B16C0648"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_DD8C11A6C1A577C545B301B0E2A6C092"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -136,6 +124,18 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_C40045EB84FA4FB8A15B8B65B16C0648"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -148,7 +148,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_39056CC5A657978C5F88396C589D891F"
+        "OwnerKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -178,10 +178,10 @@
             "ComponentsUrl" = "8:"
                 "Items"
                 {
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0,Profile=Client"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.0"
                     {
-                    "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 und x64)"
-                    "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                    "Name" = "8:Microsoft .NET Framework 4 (x86 und x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.0"
                     }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
                     {
@@ -304,7 +304,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -343,14 +343,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_39056CC5A657978C5F88396C589D891F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_33CB7A18E801968BDF62DE4988F7D3AB"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:S2MuninPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ea2d603a65fe4663, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_39056CC5A657978C5F88396C589D891F"
+                    "_33CB7A18E801968BDF62DE4988F7D3AB"
                     {
                     "Name" = "8:S2MuninPlugin.dll"
                     "Attributes" = "3:512"
@@ -504,7 +504,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:S2 Munin"
         "ProductCode" = "8:{0734F6D4-9B8D-4AC5-B25F-EFB9EEC07D2E}"
-        "PackageCode" = "8:{154BB752-38C9-45E3-9A67-29D566946F7D}"
+        "PackageCode" = "8:{67D0C73D-7A48-489D-87F2-24BFE6B9F4C2}"
         "UpgradeCode" = "8:{1A3FDA09-07E1-446C-A9C7-9BAB55C8FA74}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
