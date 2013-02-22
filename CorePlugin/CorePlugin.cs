@@ -21,6 +21,7 @@ namespace S2.Munin.Plugins.Core
         {
             // configuration values
             bool netstatLogarithmic = true;
+            bool processesLogarithmic = true;
             string netstatCategories = null;
             if (settings != null)
             {
@@ -31,6 +32,10 @@ namespace S2.Munin.Plugins.Core
                 if (settings.ContainsKey("netstat-categories"))
                 {
                     netstatCategories = settings["netstat-categories"];
+                }
+                if (settings.ContainsKey("processes-logarithmic"))
+                {
+                    bool.TryParse(settings["processes-logarithmic"], out processesLogarithmic);
                 }
             }
             // single graph delegates
@@ -49,7 +54,7 @@ namespace S2.Munin.Plugins.Core
             configurationDelegates.Add("memory", memory.GetConfiguration);
             valueDelegates.Add("memory", memory.GetValues);
             enabledGraphs.Add("memory");
-            Processes processes = new Processes();
+            Processes processes = new Processes(processesLogarithmic);
             configurationDelegates.Add("processes", processes.GetConfiguration);
             valueDelegates.Add("processes", processes.GetValues);
             enabledGraphs.Add("processes");

@@ -9,11 +9,13 @@ namespace S2.Munin.Plugins.Core
 {
     public class Processes
     {
-        PerformanceCounter processCounter;
-        PerformanceCounter threadCounter;
+        protected PerformanceCounter processCounter;
+        protected PerformanceCounter threadCounter;
+        protected bool logarithmicGraph;
 
-        public Processes()
+        public Processes(bool logarithmicGraph)
         {
+            this.logarithmicGraph = logarithmicGraph;
             PerformanceCounterCategory category = new PerformanceCounterCategory("System");
 
             this.processCounter = category.GetCounters().Where(pc => pc.CounterName == @"Processes").FirstOrDefault();
@@ -28,7 +30,7 @@ namespace S2.Munin.Plugins.Core
             StringBuilder configuration = new StringBuilder();
             
             configuration.Append("graph_title Processes\n");
-            configuration.Append("graph_args -l 0 --base 1000\n");
+            configuration.AppendFormat("graph_args --base 1000{0}\n", this.logarithmicGraph ? " --logarithmic" : "");
             configuration.Append("graph_vlabel Number of processes\n");
             configuration.Append("graph_category processes\n");
             configuration.Append("graph_order processes_processes processes_threads\n");
