@@ -18,14 +18,14 @@ namespace S2.Munin.Service
         {
             FileInfo file = new FileInfo(Assembly.GetExecutingAssembly().Location);
 
-            string pluginDirectoryPath = Path.Combine(file.Directory.FullName, "Plugins");
+            string pluginDirectoryPath = Path.Combine(file.Directory.FullName, Constants.PluginDirectory);
 
 #if DEBUG
-            var plugins = file.Directory.GetFiles("*.dll", SearchOption.AllDirectories);
+            var plugins = file.Directory.GetFiles(Constants.DllPattern, SearchOption.AllDirectories);
 #else
             FileInfo[] plugins =
                            Directory.Exists(pluginDirectoryPath)
-                               ? new DirectoryInfo(pluginDirectoryPath).GetFiles("*.dll")
+                               ? new DirectoryInfo(pluginDirectoryPath).GetFiles(Constants.DllPattern)
                                : new FileInfo[] { };
 #endif
 
@@ -71,7 +71,7 @@ namespace S2.Munin.Service
             IDictionary<string, string> settings = new Dictionary<string, string>();
 
             FileInfo file = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            string settingsPath = Path.Combine(file.Directory.FullName, "S2Munin.ini");
+            string settingsPath = Path.Combine(file.Directory.FullName, Constants.IniFileName);
 
             if (!File.Exists(settingsPath))
             {
