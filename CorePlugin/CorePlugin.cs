@@ -15,7 +15,7 @@ namespace S2.Munin.Plugins.Core
         private Dictionary<string, GraphDelegate> configurationDelegates = new Dictionary<string, GraphDelegate>();
         private List<string> enabledGraphs = new List<string>();
 
-        public string PluginName { get {return "Core"; } }
+        public string PluginName { get { return "Core"; } }
 
         public bool Initialize(IDictionary<string, string> settings)
         {
@@ -23,6 +23,7 @@ namespace S2.Munin.Plugins.Core
             bool netstatLogarithmic = true;
             bool processesLogarithmic = true;
             string netstatCategories = null;
+            bool displayFreeSpace = false;
             if (settings != null)
             {
                 if (settings.ContainsKey("netstat-logarithmic"))
@@ -37,13 +38,17 @@ namespace S2.Munin.Plugins.Core
                 {
                     bool.TryParse(settings["processes-logarithmic"], out processesLogarithmic);
                 }
+                if (settings.ContainsKey("display-space"))
+                {
+                    displayFreeSpace = string.Compare("free", settings["display-space"], true) == 0;
+                }
             }
             // single graph delegates
             Cpu cpu = new Cpu();
             configurationDelegates.Add("cpu", cpu.GetConfiguration);
             valueDelegates.Add("cpu", cpu.GetValues);
             enabledGraphs.Add("cpu");
-            Disk disk = new Disk();
+            Disk disk = new Disk(displayFreeSpace);
             configurationDelegates.Add("disk_space", disk.GetFreeSpaceConfiguration);
             valueDelegates.Add("disk_space", disk.GetFreeSpaceValues);
             enabledGraphs.Add("disk_space");
