@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Management.Automation;
-using System.Management.Automation.Runspaces;
 using System.Text;
 
 using S2.Munin.Plugin;
@@ -59,33 +58,17 @@ namespace S2.Munin.Plugins.PowerShell
 
         private string RunScript(string scriptPath, params string[] arguments)
         {
-            StringWriter output = new StringWriter();
-            RunspaceConfiguration runspaceConfiguration = RunspaceConfiguration.Create();
+            Process process = new Process();
+            process.StartInfo.FileName = "powershell.exe";
+            process.StartInfo.Arguments = string.Format("-executionpolicy unrestricted -file \"{0}\" \"{1}\"", scriptPath, string.Join("\" \"", arguments));
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.Start();
 
-            Runspace runspace = RunspaceFactory.CreateRunspace(runspaceConfiguration);
-            runspace.Open();
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
 
-            runspace.SessionStateProxy.SetVariable("Output", output);
-
-            RunspaceInvoke scriptInvoker = new RunspaceInvoke(runspace);
-            scriptInvoker.Invoke("Set-ExecutionPolicy Bypass");
-
-            Pipeline pipeline = runspace.CreatePipeline();
-
-            //Here's how you add a new script with arguments
-            Command command = new Command(scriptPath);
-            foreach (string argument in arguments)
-            {
-                CommandParameter parameter = new CommandParameter(argument);
-                command.Parameters.Add(parameter);
-            }
-
-            pipeline.Commands.Add(command);
-
-            // Execute PowerShell script
-            var results = pipeline.Invoke();
-
-            return output.ToString();
+            return output;
         }
     }
 }
