@@ -6,6 +6,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 
+using S2.Munin.Plugin;
+
 namespace S2.Munin.Service
 {
     public class Listener
@@ -39,10 +41,17 @@ namespace S2.Munin.Service
         {
             while (this.running)
             {
-                TcpClient client = this.tcpListener.AcceptTcpClient();
+                try
+                {
+                    TcpClient client = this.tcpListener.AcceptTcpClient();
 
-                MuninConnection connection = new MuninConnection(client);
-                connection.Start();
+                    MuninConnection connection = new MuninConnection(client);
+                    connection.Start();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Connection Error", e);
+                }
             }
             this.tcpListener.Stop();
             this.tcpListener = null;

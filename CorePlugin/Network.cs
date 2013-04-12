@@ -16,7 +16,7 @@ namespace S2.Munin.Plugins.Core
 
         public IList<string> Graphs { get; private set; }
 
-        public Network()
+        public Network(Settings settings)
         {
             // find network devices
             // http://weblogs.sqlteam.com/mladenp/archive/2010/11/04/find-only-physical-network-adapters-with-wmi-win32_networkadapter-class.aspx
@@ -40,25 +40,35 @@ namespace S2.Munin.Plugins.Core
                 }
 
                 string interfaceName = Regex.Replace(instance.ToLowerInvariant(), "[^a-z0-9]", "");
+                if ((settings.DisabledNetworkInterfaces != null) && settings.DisabledNetworkInterfaces.Contains(interfaceName))
+                {
+                    continue;
+                }
                 string trafficGraphName = "if_" + interfaceName;
                 string errorGraphName = "if_err_" + interfaceName;
                 PerformanceCounter[] counter = category.GetCounters(instance);
 
-                PerformanceCounter inputCounter = counter.Where(pc => pc.CounterName == @"Bytes Received/sec").FirstOrDefault();
-                PerformanceCounter outputCounter = counter.Where(pc => pc.CounterName == @"Bytes Sent/sec").FirstOrDefault();
-                this.inputCounter.Add(trafficGraphName, inputCounter);
-                this.outputCounter.Add(trafficGraphName, outputCounter);
-                inputCounter.NextValue();
-                outputCounter.NextValue();
-                graphNames.Add(trafficGraphName);
+                if (!settings.DisableNetworkIO)
+                {
+                    PerformanceCounter inputCounter = counter.Where(pc => pc.CounterName == @"Bytes Received/sec").FirstOrDefault();
+                    PerformanceCounter outputCounter = counter.Where(pc => pc.CounterName == @"Bytes Sent/sec").FirstOrDefault();
+                    this.inputCounter.Add(trafficGraphName, inputCounter);
+                    this.outputCounter.Add(trafficGraphName, outputCounter);
+                    inputCounter.NextValue();
+                    outputCounter.NextValue();
+                    graphNames.Add(trafficGraphName);
+                }
 
-                inputCounter = counter.Where(pc => pc.CounterName == @"Packets Received Errors").FirstOrDefault();
-                outputCounter = counter.Where(pc => pc.CounterName == @"Packets Outbound Errors").FirstOrDefault();
-                this.inputCounter.Add(errorGraphName, inputCounter);
-                this.outputCounter.Add(errorGraphName, outputCounter);
-                inputCounter.NextValue();
-                outputCounter.NextValue();
-                graphNames.Add(errorGraphName);
+                if (!settings.DisableNetworkErrors)
+                {
+                    PerformanceCounter inputCounter = counter.Where(pc => pc.CounterName == @"Packets Received Errors").FirstOrDefault();
+                    PerformanceCounter outputCounter = counter.Where(pc => pc.CounterName == @"Packets Outbound Errors").FirstOrDefault();
+                    this.inputCounter.Add(errorGraphName, inputCounter);
+                    this.outputCounter.Add(errorGraphName, outputCounter);
+                    inputCounter.NextValue();
+                    outputCounter.NextValue();
+                    graphNames.Add(errorGraphName);
+                }
             }
             this.Graphs = graphNames;
         }

@@ -17,64 +17,67 @@ namespace S2.Munin.Plugins.Core
 
         public string PluginName { get { return "Core"; } }
 
-        public bool Initialize(IDictionary<string, string> settings)
+        public bool Initialize(IDictionary<string, string> configuration)
         {
             // configuration values
-            bool netstatLogarithmic = true;
-            bool processesLogarithmic = true;
-            string netstatCategories = null;
-            bool displayFreeSpace = false;
-            if (settings != null)
+            Settings settings = new Settings(configuration);
+
+            // single graph delegates
+            if (!settings.DisableCpu)
             {
-                if (settings.ContainsKey("netstat-logarithmic"))
+                Cpu cpu = new Cpu();
+                configurationDelegates.Add("cpu", cpu.GetConfiguration);
+                valueDelegates.Add("cpu", cpu.GetValues);
+                enabledGraphs.Add("cpu");
+            }
+            if (!settings.DisableDiskIO || !settings.DisableDiskSpace)
+            {
+                Disk disk = new Disk(settings);
+                if (!settings.DisableDiskSpace)
                 {
-                    bool.TryParse(settings["netstat-logarithmic"], out netstatLogarithmic);
+                    configurationDelegates.Add("disk_space", disk.GetFreeSpaceConfiguration);
+                    valueDelegates.Add("disk_space", disk.GetFreeSpaceValues);
+                    enabledGraphs.Add("disk_space");
                 }
-                if (settings.ContainsKey("netstat-categories"))
+                if (!settings.DisableDiskIO)
                 {
-                    netstatCategories = settings["netstat-categories"];
-                }
-                if (settings.ContainsKey("processes-logarithmic"))
-                {
-                    bool.TryParse(settings["processes-logarithmic"], out processesLogarithmic);
-                }
-                if (settings.ContainsKey("display-space"))
-                {
-                    displayFreeSpace = string.Compare("free", settings["display-space"], true) == 0;
+                    configurationDelegates.Add("disk_io", disk.GetIOConfiguration);
+                    valueDelegates.Add("disk_io", disk.GetIOValues);
+                    enabledGraphs.Add("disk_io");
                 }
             }
-            // single graph delegates
-            Cpu cpu = new Cpu();
-            configurationDelegates.Add("cpu", cpu.GetConfiguration);
-            valueDelegates.Add("cpu", cpu.GetValues);
-            enabledGraphs.Add("cpu");
-            Disk disk = new Disk(displayFreeSpace);
-            configurationDelegates.Add("disk_space", disk.GetFreeSpaceConfiguration);
-            valueDelegates.Add("disk_space", disk.GetFreeSpaceValues);
-            enabledGraphs.Add("disk_space");
-            configurationDelegates.Add("disk_io", disk.GetIOConfiguration);
-            valueDelegates.Add("disk_io", disk.GetIOValues);
-            enabledGraphs.Add("disk_io");
-            Memory memory = new Memory();
-            configurationDelegates.Add("memory", memory.GetConfiguration);
-            valueDelegates.Add("memory", memory.GetValues);
-            enabledGraphs.Add("memory");
-            Processes processes = new Processes(processesLogarithmic);
-            configurationDelegates.Add("processes", processes.GetConfiguration);
-            valueDelegates.Add("processes", processes.GetValues);
-            enabledGraphs.Add("processes");
-            Netstat netstat = new Netstat(netstatLogarithmic, netstatCategories);
-            configurationDelegates.Add("netstat", netstat.GetConfiguration);
-            valueDelegates.Add("netstat", netstat.GetValues);
-            enabledGraphs.Add("netstat");
+            if (!settings.DisableMemory)
+            {
+                Memory memory = new Memory();
+                configurationDelegates.Add("memory", memory.GetConfiguration);
+                valueDelegates.Add("memory", memory.GetValues);
+                enabledGraphs.Add("memory");
+            }
+            if (!settings.DisableProcesses)
+            {
+                Processes processes = new Processes(settings);
+                configurationDelegates.Add("processes", processes.GetConfiguration);
+                valueDelegates.Add("processes", processes.GetValues);
+                enabledGraphs.Add("processes");
+            }
+            if (!settings.DisableNetstat)
+            {
+                Netstat netstat = new Netstat(settings);
+                configurationDelegates.Add("netstat", netstat.GetConfiguration);
+                valueDelegates.Add("netstat", netstat.GetValues);
+                enabledGraphs.Add("netstat");
+            }
 
             // multi graph delegates
-            Network network = new Network();
-            foreach (string graph in network.Graphs)
+            if (!settings.DisableNetworkIO || !settings.DisableNetworkErrors)
             {
-                configurationDelegates.Add(graph, network.GetConfiguration);
-                valueDelegates.Add(graph, network.GetValues);
-                enabledGraphs.Add(graph);
+                Network network = new Network(settings);
+                foreach (string graph in network.Graphs)
+                {
+                    configurationDelegates.Add(graph, network.GetConfiguration);
+                    valueDelegates.Add(graph, network.GetValues);
+                    enabledGraphs.Add(graph);
+                }
             }
             return true;
         }

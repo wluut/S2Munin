@@ -55,12 +55,19 @@ namespace S2.Munin.Service
                         continue;
                     }
 
-                    IMuninPlugin plugin = Activator.CreateInstance(type) as IMuninPlugin;
-
-                    IDictionary<string, string> pluginSettings = GetSettings(plugin.PluginName);
-                    if (plugin.Initialize(pluginSettings))
+                    try
                     {
-                        loadedPlugins.Add(plugin);
+                        IMuninPlugin plugin = Activator.CreateInstance(type) as IMuninPlugin;
+
+                        IDictionary<string, string> pluginSettings = GetSettings(plugin.PluginName);
+                        if (plugin.Initialize(pluginSettings))
+                        {
+                            loadedPlugins.Add(plugin);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("error loading plugin " + type.FullName + " from " + pluginFile.Name, e);
                     }
                 }
             }
@@ -70,23 +77,30 @@ namespace S2.Munin.Service
         {
             IDictionary<string, string> settings = new Dictionary<string, string>();
 
-            FileInfo file = new FileInfo(Assembly.GetExecutingAssembly().Location);
-            string settingsPath = Path.Combine(file.Directory.FullName, Constants.IniFileName);
-
-            if (!File.Exists(settingsPath))
+            try
             {
-                return settings;
-            }
-            INI.IniFileName ini = new INI.IniFileName(settingsPath);
+                FileInfo file = new FileInfo(Assembly.GetExecutingAssembly().Location);
+                string settingsPath = Path.Combine(file.Directory.FullName, Constants.IniFileName);
 
-            string[] entries = ini.GetEntryNames(pluginName);
-            if (entries != null)
-            {
-                foreach (string entry in entries)
+                if (!File.Exists(settingsPath))
                 {
-                    string value = ini.GetEntryValue(pluginName, entry) as string;
-                    settings.Add(entry, value);
+                    return settings;
                 }
+                INI.IniFileName ini = new INI.IniFileName(settingsPath);
+
+                string[] entries = ini.GetEntryNames(pluginName);
+                if (entries != null)
+                {
+                    foreach (string entry in entries)
+                    {
+                        string value = ini.GetEntryValue(pluginName, entry) as string;
+                        settings.Add(entry, value);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error("error reading settings", e);
             }
             return settings;
         }

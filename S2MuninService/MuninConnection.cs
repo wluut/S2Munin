@@ -80,16 +80,18 @@ namespace S2.Munin.Service
                         unprocessedInput = unprocessedInput.Substring(lineBreakMatch.Index + lineBreakMatch.Length);
                         lineBreakMatch = lineBreakPattern.Match(unprocessedInput);
 
-                        Console.WriteLine(String.Format("Received: {0}\n", line));
                         string response = this.HandleCommandLine(line);
                         this.WriteMessage(stream, response);
-                        Console.WriteLine(String.Format("Sent: {0}\n", response));
                     }
                 }
             }
             catch (IOException)
             {
                 // assume connection closed
+            }
+            catch (Exception e)
+            {
+                Logger.Error("error handling connection", e);
             }
 
             // Shutdown and end connection

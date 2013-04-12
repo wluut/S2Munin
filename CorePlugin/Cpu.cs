@@ -10,7 +10,7 @@ namespace S2.Munin.Plugins.Core
 {
     public class Cpu
     {
-        private Dictionary<string, PerformanceCounter> counterMap = new Dictionary<string,PerformanceCounter>();
+        private Dictionary<string, PerformanceCounter> counterMap = new Dictionary<string, PerformanceCounter>();
 
         public Cpu()
         {
@@ -35,7 +35,7 @@ namespace S2.Munin.Plugins.Core
         public string GetConfiguration(string graphName)
         {
             StringBuilder configuration = new StringBuilder();
-            
+
             List<string> graphOrder = new List<string>(this.counterMap.Keys);
             graphOrder.Sort();
 

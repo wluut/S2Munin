@@ -21,18 +21,18 @@ namespace S2.Munin.Plugins.Core
         List<PerformanceCounter> passiveConnectionCounterList = new List<PerformanceCounter>();
         List<PerformanceCounter> resetConnectionCounterList = new List<PerformanceCounter>();
 
-        public Netstat(bool logarithmic, string categoriesToCheck)
+        public Netstat(Settings settings)
         {
-            this.logarithmicGraph = logarithmic;
+            this.logarithmicGraph = settings.NetstatLogarithmic;
 
-            string [] categoryArray;
-            if (string.IsNullOrEmpty(categoriesToCheck))
+            string[] categoryArray;
+            if ((settings.NetstatCategories == null) || (settings.NetstatCategories.Count == 0))
             {
                 categoryArray = categories;
             }
             else
             {
-                categoryArray = Regex.Split(categoriesToCheck, "\\s*,\\s*");
+                categoryArray = settings.NetstatCategories.ToArray();
             }
 
             foreach (string categoryName in categoryArray)

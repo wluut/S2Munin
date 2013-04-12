@@ -13,9 +13,9 @@ namespace S2.Munin.Plugins.Core
         protected PerformanceCounter threadCounter;
         protected bool logarithmicGraph;
 
-        public Processes(bool logarithmicGraph)
+        public Processes(Settings settings)
         {
-            this.logarithmicGraph = logarithmicGraph;
+            this.logarithmicGraph = settings.ProcessesLogarithmic;
             PerformanceCounterCategory category = new PerformanceCounterCategory("System");
 
             this.processCounter = category.GetCounters().Where(pc => pc.CounterName == @"Processes").FirstOrDefault();
@@ -28,7 +28,7 @@ namespace S2.Munin.Plugins.Core
         public string GetConfiguration(string graphName)
         {
             StringBuilder configuration = new StringBuilder();
-            
+
             configuration.Append("graph_title Processes\n");
             configuration.AppendFormat("graph_args --base 1000{0}\n", this.logarithmicGraph ? " --logarithmic" : "");
             configuration.Append("graph_vlabel Number of processes\n");

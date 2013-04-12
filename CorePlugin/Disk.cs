@@ -15,9 +15,9 @@ namespace S2.Munin.Plugins.Core
         private Dictionary<string, PerformanceCounter> writeCounterMap = new Dictionary<string, PerformanceCounter>();
         private bool displayFreeSpace;
 
-        public Disk(bool displayFreeSpace)
+        public Disk(Settings settings)
         {
-            this.displayFreeSpace = displayFreeSpace;
+            this.displayFreeSpace = settings.DisplayFreeSpace;
             PerformanceCounterCategory category = new PerformanceCounterCategory("LogicalDisk");
             foreach (string instanceName in category.GetInstanceNames())
             {
@@ -39,7 +39,7 @@ namespace S2.Munin.Plugins.Core
 
                 // Free Space
                 PerformanceCounter counter = category.GetCounters(instanceName).Where(pc => pc.CounterName == @"% Free Space").FirstOrDefault();
-                string freeSpaceCounterName = string.Format(CultureInfo.InvariantCulture, "disk_space_{0}_{1}", this.displayFreeSpace?"free":"used", deviceName);
+                string freeSpaceCounterName = string.Format(CultureInfo.InvariantCulture, "disk_space_{0}_{1}", this.displayFreeSpace ? "free" : "used", deviceName);
                 counter.NextValue();
                 this.freeSpaceCounterMap.Add(freeSpaceCounterName, counter);
 
