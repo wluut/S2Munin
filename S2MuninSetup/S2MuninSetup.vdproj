@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_2EF1398CE77749868246337B5AFDB276"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "OwnerKey" = "8:_8C55BB0E1DB5449093458C320FD24372"
         "MsmSig" = "8:_UNDEFINED"
@@ -22,7 +28,7 @@
         "Entry"
         {
         "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
-        "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
+        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -34,7 +40,7 @@
         "Entry"
         {
         "MsmKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
-        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
+        "OwnerKey" = "8:_D27FB229505B494AA6D6ABBF1122196E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -70,13 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
+        "OwnerKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -88,7 +88,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_33CB7A18E801968BDF62DE4988F7D3AB"
+        "OwnerKey" = "8:_914326C39CF448189FA287387F18B82B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_AEF5AA846942444ABA4277C62ECB08E2"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -252,6 +258,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2EF1398CE77749868246337B5AFDB276"
+            {
+            "SourcePath" = "8:..\\Common\\munin.ico"
+            "TargetName" = "8:munin.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_AF39E661FCE144DF9FF2315C259C3679"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_33CB7A18E801968BDF62DE4988F7D3AB"
             {
             "AssemblyRegister" = "3:1"
@@ -259,11 +285,6 @@
             "AssemblyAsmDisplayName" = "8:S2MuninPlugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ea2d603a65fe4663, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_33CB7A18E801968BDF62DE4988F7D3AB"
-                    {
-                    "Name" = "8:S2MuninPlugin.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:S2MuninPlugin.dll"
             "TargetName" = "8:"
@@ -368,7 +389,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://www.sinnerschrader.com/"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_2EF1398CE77749868246337B5AFDB276"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
