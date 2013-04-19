@@ -13,7 +13,7 @@ namespace S2.Munin.Service
     public class Listener
     {
         private static Listener instance = new Listener();
-        public static Listener Instance { get { return instance;}}
+        public static Listener Instance { get { return instance; } }
 
         private TcpListener tcpListener;
         private bool running;
@@ -30,6 +30,9 @@ namespace S2.Munin.Service
                 IPAddress localAddr = IPAddress.Parse(address);
                 this.tcpListener = new TcpListener(localAddr, port);
             }
+            // set SO_REUSEADDR on socket
+            this.tcpListener.Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, 1);
+            // start listener
             this.tcpListener.Start();
             this.running = true;
 
