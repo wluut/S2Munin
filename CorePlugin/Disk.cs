@@ -13,11 +13,11 @@ namespace S2.Munin.Plugins.Core
         private Dictionary<string, PerformanceCounter> freeSpaceCounterMap = new Dictionary<string, PerformanceCounter>();
         private Dictionary<string, PerformanceCounter> readCounterMap = new Dictionary<string, PerformanceCounter>();
         private Dictionary<string, PerformanceCounter> writeCounterMap = new Dictionary<string, PerformanceCounter>();
-        private bool displayFreeSpace;
+        private Settings.DiskSpaceDisplayType diskSpaceDisplay;
 
         public Disk(Settings settings)
         {
-            this.displayFreeSpace = settings.DisplayFreeSpace;
+            this.diskSpaceDisplay = settings.DiskSpaceDisplay;
             PerformanceCounterCategory category = new PerformanceCounterCategory("LogicalDisk");
             foreach (string instanceName in category.GetInstanceNames())
             {
@@ -39,7 +39,7 @@ namespace S2.Munin.Plugins.Core
 
                 // Free Space
                 PerformanceCounter counter = category.GetCounters(instanceName).Where(pc => pc.CounterName == @"% Free Space").FirstOrDefault();
-                string freeSpaceCounterName = string.Format(CultureInfo.InvariantCulture, "disk_space_{0}_{1}", this.displayFreeSpace ? "free" : "used", deviceName);
+                string freeSpaceCounterName = string.Format(CultureInfo.InvariantCulture, "disk_space_{0}_{1}", this.diskSpaceDisplay.ToString().ToLowerInvariant(), deviceName);
                 counter.NextValue();
                 this.freeSpaceCounterMap.Add(freeSpaceCounterName, counter);
 
@@ -62,7 +62,7 @@ namespace S2.Munin.Plugins.Core
             List<string> graphOrder = new List<string>(this.freeSpaceCounterMap.Keys);
             graphOrder.Sort();
 
-            if (this.displayFreeSpace)
+            if (this.diskSpaceDisplay == Settings.DiskSpaceDisplayType.FREE)
             {
                 configuration.Append("graph_title Free disk space\n");
             }
@@ -80,7 +80,7 @@ namespace S2.Munin.Plugins.Core
 
                 configuration.AppendFormat("{0}.label Disk {1}\n", counterName, counter.InstanceName);
                 configuration.AppendFormat("{0}.draw LINE\n", counterName);
-                if (this.displayFreeSpace)
+                if (this.diskSpaceDisplay == Settings.DiskSpaceDisplayType.FREE)
                 {
                     configuration.AppendFormat("{0}.info Disk {1} free space in percent.\n", counterName, counter.InstanceName);
                 }
@@ -98,7 +98,7 @@ namespace S2.Munin.Plugins.Core
             foreach (KeyValuePair<string, PerformanceCounter> counter in this.freeSpaceCounterMap)
             {
                 float value = counter.Value.NextValue();
-                if (!this.displayFreeSpace)
+                if (this.diskSpaceDisplay == Settings.DiskSpaceDisplayType.USED)
                 {
                     value = 100.0f - value;
                 }

@@ -25,7 +25,7 @@ namespace S2.Munin.Plugins.Core
             // single graph delegates
             if (!coreSettings.DisableCpu)
             {
-                Cpu cpu = new Cpu();
+                Cpu cpu = new Cpu(coreSettings);
                 configurationDelegates.Add("cpu", cpu.GetConfiguration);
                 valueDelegates.Add("cpu", cpu.GetValues);
                 enabledGraphs.Add("cpu");

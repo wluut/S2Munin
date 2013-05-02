@@ -9,10 +9,14 @@ namespace S2.Munin.Plugins.Core
 {
     public class Settings
     {
+        public enum DiskSpaceDisplayType { FREE, USED }
+        public enum CpuDisplayType { BOTH, TOTAL, SINGLE }
+
         public bool NetstatLogarithmic { get; private set; }
         public bool ProcessesLogarithmic { get; private set; }
         public IList<string> NetstatCategories { get; private set; }
-        public bool DisplayFreeSpace { get; private set; }
+        public DiskSpaceDisplayType DiskSpaceDisplay { get; private set; }
+        public CpuDisplayType CpuDisplay { get; private set; }
         public IList<string> DisabledNetworkInterfaces { get; private set; }
 
         public bool DisableCpu { get; private set; }
@@ -29,7 +33,8 @@ namespace S2.Munin.Plugins.Core
             this.NetstatLogarithmic = true;
             this.ProcessesLogarithmic = true;
             this.NetstatCategories = null;
-            this.DisplayFreeSpace = false;
+            this.DiskSpaceDisplay = DiskSpaceDisplayType.USED;
+            this.CpuDisplay = CpuDisplayType.BOTH;
             this.DisabledNetworkInterfaces = new List<string>();
 
             this.DisableCpu = false;
@@ -78,9 +83,22 @@ namespace S2.Munin.Plugins.Core
             }
             #endregion
             #region Disk
-            if (settings.ContainsKey("display-space"))
+            if (settings.ContainsKey("display-space") && (string.Compare("free", settings["display-space"], StringComparison.OrdinalIgnoreCase) == 0))
             {
-                this.DisplayFreeSpace = string.Compare("free", settings["display-space"], StringComparison.OrdinalIgnoreCase) == 0;
+                this.DiskSpaceDisplay = DiskSpaceDisplayType.FREE;
+            }
+            #endregion
+            #region Cpu
+            if (settings.ContainsKey("display-cpu"))
+            {
+                if (string.Compare("total", settings["display-cpu"], StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    this.CpuDisplay = CpuDisplayType.TOTAL;
+                }
+                else if (string.Compare("single", settings["display-cpu"], StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    this.CpuDisplay = CpuDisplayType.SINGLE;
+                }
             }
             #endregion
             #region Network

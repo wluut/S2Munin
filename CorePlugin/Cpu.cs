@@ -13,7 +13,7 @@ namespace S2.Munin.Plugins.Core
     {
         private Dictionary<string, PerformanceCounter> counterMap = new Dictionary<string, PerformanceCounter>();
 
-        public Cpu()
+        public Cpu(Settings settings)
         {
             PerformanceCounterCategory category = new PerformanceCounterCategory("Processor");
             foreach (string instanceName in category.GetInstanceNames())
@@ -22,10 +22,18 @@ namespace S2.Munin.Plugins.Core
                 string counterName = instanceName;
                 if (Regex.IsMatch(instanceName, "^\\d+$"))
                 {
+                    if (settings.CpuDisplay == Settings.CpuDisplayType.TOTAL)
+                    {
+                        continue;
+                    }
                     counterName = string.Format(CultureInfo.InvariantCulture, "cpu_{0}", instanceName);
                 }
                 else
                 {
+                    if (settings.CpuDisplay == Settings.CpuDisplayType.SINGLE)
+                    {
+                        continue;
+                    }
                     counterName = Regex.Replace(instanceName.ToLowerInvariant(), "[^a-z0-9]", "");
                 }
                 counter.NextValue();
