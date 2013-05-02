@@ -21,9 +21,9 @@ namespace S2.Munin.Plugin
 
         IList<string> GetGraphs();
 
-        string GetConfiguration(string graph);
+        string GetConfiguration(string graphName);
 
-        string GetValues(string graph);
+        string GetValues(string graphName);
 
         void StopPlugin();
     }

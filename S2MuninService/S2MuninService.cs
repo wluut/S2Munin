@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -39,7 +41,7 @@ namespace S2.Munin.Service
                 {
                     if (!int.TryParse(iniPort, out muninPort))
                     {
-                        Logger.ErrorFormat("could not parse port \"{0}\", defaulting to {1}", iniPort, muninPort);
+                        Logger.ErrorFormat(CultureInfo.InvariantCulture, "could not parse port \"{0}\", defaulting to {1}", iniPort, muninPort);
                     }
                 }
                 string iniBindAdress = ini.GetEntryValue(Constants.IniGlobalSection, Constants.IniBindKey) as string;
@@ -58,7 +60,7 @@ namespace S2.Munin.Service
         {
             Listener.Instance.StopSocket();
 
-            foreach (IMuninPlugin plugin in PluginHelper.loadedPlugins)
+            foreach (IMuninPlugin plugin in PluginHelper.LoadedPlugins)
             {
                 plugin.StopPlugin();
             }

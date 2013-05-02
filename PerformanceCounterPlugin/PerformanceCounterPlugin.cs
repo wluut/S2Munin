@@ -77,13 +77,13 @@ namespace S2.Munin.Plugins.PerformanceCounter
                     }
                     if (counterArgument == "counter")
                     {
-                        counter.PerformanceCounter = this.GetPerformanceCounter(entry.Value);
+                        counter.PerformanceCounter = GetPerformanceCounter(entry.Value);
                         continue;
                     }
                     counter.Arguments.Add(counterArgument, entry.Value);
                     if (counterArgument == "type")
                     {
-                        counter.FloatValue = (entry.Value.ToLowerInvariant() == "gauge");
+                        counter.FloatValue = (entry.Value.ToUpperInvariant() == "GAUGE");
                     }
                    
                 }
@@ -163,18 +163,18 @@ namespace S2.Munin.Plugins.PerformanceCounter
         }
 
 
-        private System.Diagnostics.PerformanceCounter GetPerformanceCounter(string path)
+        private static System.Diagnostics.PerformanceCounter GetPerformanceCounter(string path)
         {
             // check if performance counter path exists
             string host = null;
-            if (path.StartsWith(@"\\"))
+            if (path.StartsWith(@"\\", StringComparison.OrdinalIgnoreCase))
             {
                 int index = path.IndexOf('\\', 2);
                 host = path.Substring(2, index - 2);
                 path = path.Substring(index);
 
             }
-            if (!path.StartsWith(@"\"))
+            if (!path.StartsWith(@"\", StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }

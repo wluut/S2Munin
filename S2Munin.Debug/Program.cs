@@ -52,7 +52,7 @@ namespace S2.Munin.Debug
 
             Listener.Instance.StopSocket();
 
-            foreach (IMuninPlugin plugin in PluginHelper.loadedPlugins)
+            foreach (IMuninPlugin plugin in PluginHelper.LoadedPlugins)
             {
                 plugin.StopPlugin();
             }

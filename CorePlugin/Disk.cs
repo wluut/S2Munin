@@ -118,25 +118,25 @@ namespace S2.Munin.Plugins.Core
             configuration.Append("graph_args --base 1024 -l 0\n");
             configuration.Append("graph_vlabel bytes/second read (-) / written (+)\n");
             configuration.Append("graph_category disk\n");
-            configuration.AppendFormat("graph_order");
+            configuration.Append("graph_order");
             foreach (string counterName in graphOrder)
             {
-                configuration.AppendFormat(" {0}_read {0}_write", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, " {0}_read {0}_write", counterName);
             }
             configuration.Append("\n");
             foreach (string counterName in graphOrder)
             {
                 PerformanceCounter readCounter = this.readCounterMap[counterName];
 
-                configuration.AppendFormat("{0}_read.label {1}\n", counterName, readCounter.InstanceName);
-                configuration.AppendFormat("{0}_read.type DERIVE\n", counterName);
-                configuration.AppendFormat("{0}_read.min 0\n", counterName);
-                configuration.AppendFormat("{0}_read.graph no\n", counterName);
-                configuration.AppendFormat("{0}_write.label {1}\n", counterName, readCounter.InstanceName);
-                configuration.AppendFormat("{0}_write.info I/O on disk {1}\n", counterName, readCounter.InstanceName);
-                configuration.AppendFormat("{0}_write.type DERIVE\n", counterName);
-                configuration.AppendFormat("{0}_write.min 0\n", counterName);
-                configuration.AppendFormat("{0}_write.negative {0}_read\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_read.label {1}\n", counterName, readCounter.InstanceName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_read.type DERIVE\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_read.min 0\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_read.graph no\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_write.label {1}\n", counterName, readCounter.InstanceName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_write.info I/O on disk {1}\n", counterName, readCounter.InstanceName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_write.type DERIVE\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_write.min 0\n", counterName);
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "{0}_write.negative {0}_read\n", counterName);
             }
             return configuration.ToString();
         }

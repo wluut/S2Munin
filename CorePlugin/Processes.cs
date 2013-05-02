@@ -9,20 +9,20 @@ namespace S2.Munin.Plugins.Core
 {
     public class Processes
     {
-        protected PerformanceCounter processCounter;
-        protected PerformanceCounter threadCounter;
-        protected bool logarithmicGraph;
+        protected PerformanceCounter ProcessCounter { get; set; }
+        protected PerformanceCounter ThreadCounter { get; set; }
+        protected bool LogarithmicGraph { get; set; }
 
         public Processes(Settings settings)
         {
-            this.logarithmicGraph = settings.ProcessesLogarithmic;
+            this.LogarithmicGraph = settings.ProcessesLogarithmic;
             PerformanceCounterCategory category = new PerformanceCounterCategory("System");
 
-            this.processCounter = category.GetCounters().Where(pc => pc.CounterName == @"Processes").FirstOrDefault();
-            this.processCounter.NextValue();
+            this.ProcessCounter = category.GetCounters().Where(pc => pc.CounterName == @"Processes").FirstOrDefault();
+            this.ProcessCounter.NextValue();
 
-            this.threadCounter = category.GetCounters().Where(pc => pc.CounterName == @"Threads").FirstOrDefault();
-            this.threadCounter.NextValue();
+            this.ThreadCounter = category.GetCounters().Where(pc => pc.CounterName == @"Threads").FirstOrDefault();
+            this.ThreadCounter.NextValue();
         }
 
         public string GetConfiguration(string graphName)
@@ -30,18 +30,18 @@ namespace S2.Munin.Plugins.Core
             StringBuilder configuration = new StringBuilder();
 
             configuration.Append("graph_title Processes\n");
-            configuration.AppendFormat("graph_args --base 1000{0}\n", this.logarithmicGraph ? " --logarithmic" : "");
+            configuration.AppendFormat(CultureInfo.InvariantCulture, "graph_args --base 1000{0}\n", this.LogarithmicGraph ? " --logarithmic" : "");
             configuration.Append("graph_vlabel Number of processes\n");
             configuration.Append("graph_category processes\n");
             configuration.Append("graph_order processes_processes processes_threads\n");
 
-            configuration.AppendFormat("processes_processes.label processes\n");
-            configuration.AppendFormat("processes_processes.draw LINE\n");
-            configuration.AppendFormat("processes_processes.info {0}.\n", processCounter.CounterName);
+            configuration.Append("processes_processes.label processes\n");
+            configuration.Append("processes_processes.draw LINE\n");
+            configuration.AppendFormat(CultureInfo.InvariantCulture, "processes_processes.info {0}.\n", this.ProcessCounter.CounterName);
 
-            configuration.AppendFormat("processes_threads.label threads\n");
-            configuration.AppendFormat("processes_threads.draw LINE\n");
-            configuration.AppendFormat("processes_threads.info {0}.\n", threadCounter.CounterName);
+            configuration.Append("processes_threads.label threads\n");
+            configuration.Append("processes_threads.draw LINE\n");
+            configuration.AppendFormat(CultureInfo.InvariantCulture, "processes_threads.info {0}.\n", this.ThreadCounter.CounterName);
 
             return configuration.ToString();
         }
@@ -50,8 +50,8 @@ namespace S2.Munin.Plugins.Core
         {
             StringBuilder values = new StringBuilder();
 
-            values.AppendFormat(CultureInfo.InvariantCulture, "processes_processes.value {0}\n", processCounter.NextValue());
-            values.AppendFormat(CultureInfo.InvariantCulture, "processes_threads.value {0}\n", threadCounter.NextValue());
+            values.AppendFormat(CultureInfo.InvariantCulture, "processes_processes.value {0}\n", this.ProcessCounter.NextValue());
+            values.AppendFormat(CultureInfo.InvariantCulture, "processes_threads.value {0}\n", this.ThreadCounter.NextValue());
 
             return values.ToString();
         }

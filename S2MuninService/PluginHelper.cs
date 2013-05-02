@@ -12,7 +12,8 @@ namespace S2.Munin.Service
 {
     public static class PluginHelper
     {
-        public static readonly IList<IMuninPlugin> loadedPlugins = new List<IMuninPlugin>();
+        private static List<IMuninPlugin> loadedPlugins = new List<IMuninPlugin>();
+        public static IList<IMuninPlugin> LoadedPlugins { get { return loadedPlugins.AsReadOnly(); } }
 
         public static void LoadPlugins()
         {

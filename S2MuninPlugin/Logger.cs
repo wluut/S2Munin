@@ -17,9 +17,9 @@ namespace S2.Munin.Plugin
             Error(message, null);
         }
 
-        public static void Error(object message, Exception e)
+        public static void Error(object message, Exception exception)
         {
-            WriteEventLog(EventLogEntryType.Error, message, e);
+            WriteEventLog(EventLogEntryType.Error, message, exception);
         }
 
         public static void ErrorFormat(string format, params object[] args)
@@ -37,9 +37,9 @@ namespace S2.Munin.Plugin
             Warning(message, null);
         }
 
-        public static void Warning(object message, Exception e)
+        public static void Warning(object message, Exception exception)
         {
-            WriteEventLog(EventLogEntryType.Warning, message, e);
+            WriteEventLog(EventLogEntryType.Warning, message, exception);
         }
 
         public static void WarningFormat(string format, params object[] args)
@@ -57,9 +57,9 @@ namespace S2.Munin.Plugin
             Info(message, null);
         }
 
-        public static void Info(object message, Exception e)
+        public static void Info(object message, Exception exception)
         {
-            WriteEventLog(EventLogEntryType.Information, message, e);
+            WriteEventLog(EventLogEntryType.Information, message, exception);
         }
 
         public static void InfoFormat(string format, params object[] args)
@@ -77,13 +77,13 @@ namespace S2.Munin.Plugin
             return string.Format(provider, format, args);
         }
 
-        protected static void WriteEventLog(EventLogEntryType logLevel, object message, Exception e)
+        protected static void WriteEventLog(EventLogEntryType logLevel, object message, Exception exception)
         {
             string logMessage = message.ToString();
-            if (e != null)
+            if (exception != null)
             {
                 logMessage += "\n";
-                logMessage += e.ToString();
+                logMessage += exception.ToString();
             }
            EventLog.WriteEntry(LoggerSource, logMessage, logLevel);
         }

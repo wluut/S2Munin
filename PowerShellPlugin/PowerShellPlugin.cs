@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,7 +40,7 @@ namespace S2.Munin.Plugins.PowerShell
                 return "";
             }
 
-            return this.RunScript(this.graphs[graphName], "config");
+            return RunScript(this.graphs[graphName], "config");
         }
 
         public string GetValues(string graphName)
@@ -48,7 +49,7 @@ namespace S2.Munin.Plugins.PowerShell
             {
                 return "";
             }
-            return this.RunScript(this.graphs[graphName]);
+            return RunScript(this.graphs[graphName]);
         }
 
         public void StopPlugin()
@@ -56,11 +57,11 @@ namespace S2.Munin.Plugins.PowerShell
             // nothing to do
         }
 
-        private string RunScript(string scriptPath, params string[] arguments)
+        private static string RunScript(string scriptPath, params string[] arguments)
         {
             Process process = new Process();
             process.StartInfo.FileName = "powershell.exe";
-            process.StartInfo.Arguments = string.Format("-executionpolicy unrestricted -file \"{0}\" \"{1}\"", scriptPath, string.Join("\" \"", arguments));
+            process.StartInfo.Arguments = string.Format(CultureInfo.InvariantCulture, "-executionpolicy unrestricted -file \"{0}\" \"{1}\"", scriptPath, string.Join("\" \"", arguments));
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.RedirectStandardOutput = true;
             process.Start();

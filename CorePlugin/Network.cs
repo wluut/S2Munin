@@ -27,7 +27,7 @@ namespace S2.Munin.Plugins.Core
 
             IList<string> interfaces = mos.Get()
                                                   .Cast<ManagementObject>()
-                                                  .OrderBy(p => Convert.ToUInt32(p.Properties["Index"].Value)).Select(p => p.Properties["Description"].Value as string)
+                                                  .OrderBy(p => Convert.ToUInt32(p.Properties["Index"].Value, CultureInfo.InvariantCulture)).Select(p => p.Properties["Description"].Value as string)
                                                   .ToList();
 
             List<string> graphNames = new List<string>();
@@ -79,7 +79,7 @@ namespace S2.Munin.Plugins.Core
 
             PerformanceCounter counter = this.inputCounter[graph];
 
-            if (graph.StartsWith("if_err_"))
+            if (graph.StartsWith("if_err_", StringComparison.OrdinalIgnoreCase))
             {
                 configuration.AppendFormat(CultureInfo.InvariantCulture, "graph_title {0} errors\n", counter.InstanceName);
                 configuration.Append("graph_args --base 1000\n");
@@ -87,15 +87,15 @@ namespace S2.Munin.Plugins.Core
                 configuration.Append("graph_category network\n");
                 configuration.Append("graph_order rcvd trans\n");
 
-                configuration.AppendFormat("rcvd.label received\n");
-                configuration.AppendFormat("rcvd.type COUNTER\n");
-                configuration.AppendFormat("rcvd.graph no\n");
-                configuration.AppendFormat("rcvd.min 0\n");
+                configuration.Append("rcvd.label received\n");
+                configuration.Append("rcvd.type COUNTER\n");
+                configuration.Append("rcvd.graph no\n");
+                configuration.Append("rcvd.min 0\n");
 
-                configuration.AppendFormat("trans.label packets\n");
-                configuration.AppendFormat("trans.type COUNTER\n");
-                configuration.AppendFormat("trans.negative rcvd\n");
-                configuration.AppendFormat("trans.min 0\n");
+                configuration.Append("trans.label packets\n");
+                configuration.Append("trans.type COUNTER\n");
+                configuration.Append("trans.negative rcvd\n");
+                configuration.Append("trans.min 0\n");
             }
             else
             {
@@ -105,18 +105,18 @@ namespace S2.Munin.Plugins.Core
                 configuration.Append("graph_category network\n");
                 configuration.Append("graph_order rcvd trans\n");
 
-                configuration.AppendFormat("rcvd.label received\n");
-                configuration.AppendFormat("rcvd.type DERIVE\n");
-                configuration.AppendFormat("rcvd.graph no\n");
-                configuration.AppendFormat("rcvd.cdef rcvd,8,*\n");
-                configuration.AppendFormat("rcvd.min 0\n");
+                configuration.Append("rcvd.label received\n");
+                configuration.Append("rcvd.type DERIVE\n");
+                configuration.Append("rcvd.graph no\n");
+                configuration.Append("rcvd.cdef rcvd,8,*\n");
+                configuration.Append("rcvd.min 0\n");
 
-                configuration.AppendFormat("trans.label bps\n");
-                configuration.AppendFormat("trans.type DERIVE\n");
-                configuration.AppendFormat("trans.negative rcvd\n");
-                configuration.AppendFormat("trans.cdef trans,8,*\n");
-                configuration.AppendFormat("trans.min 0\n");
-                configuration.AppendFormat("trans.info traffic of the {0} interface.\n", counter.InstanceName);
+                configuration.Append("trans.label bps\n");
+                configuration.Append("trans.type DERIVE\n");
+                configuration.Append("trans.negative rcvd\n");
+                configuration.Append("trans.cdef trans,8,*\n");
+                configuration.Append("trans.min 0\n");
+                configuration.AppendFormat(CultureInfo.InvariantCulture, "trans.info traffic of the {0} interface.\n", counter.InstanceName);
             }
             return configuration.ToString();
         }

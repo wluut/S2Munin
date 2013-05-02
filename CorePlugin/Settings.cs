@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -79,7 +80,7 @@ namespace S2.Munin.Plugins.Core
             #region Disk
             if (settings.ContainsKey("display-space"))
             {
-                this.DisplayFreeSpace = string.Compare("free", settings["display-space"], true) == 0;
+                this.DisplayFreeSpace = string.Compare("free", settings["display-space"], StringComparison.OrdinalIgnoreCase) == 0;
             }
             #endregion
             #region Network

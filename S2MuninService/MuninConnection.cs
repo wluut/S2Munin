@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -21,6 +22,16 @@ namespace S2.Munin.Service
         private const string lineBreak = "\n";
         private static readonly Regex lineBreakPattern = new Regex("\\r?\\n\\r?");
 
+        protected static string Version
+        {
+            get
+            {
+                AssemblyFileVersionAttribute versionAttribute = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true).FirstOrDefault() as AssemblyFileVersionAttribute;
+                string version = (versionAttribute == null) ? "unkown" : versionAttribute.Version;
+                return string.Format(CultureInfo.InvariantCulture, versionFormat, nodeName, version);
+            }
+        }
+
         private TcpClient client;
 
         public MuninConnection(TcpClient client)
@@ -34,7 +45,7 @@ namespace S2.Munin.Service
             thread.Start();
         }
 
-        protected void WriteMessage(NetworkStream stream, string message)
+        protected static void WriteMessage(Stream stream, string message)
         {
             if ((stream == null) || (message == null))
             {
@@ -42,7 +53,7 @@ namespace S2.Munin.Service
             }
             // normalize message
             string normalizedMessage = lineBreakPattern.Replace(message, lineBreak);
-            if (!normalizedMessage.EndsWith(lineBreak))
+            if (!normalizedMessage.EndsWith(lineBreak, StringComparison.OrdinalIgnoreCase))
             {
                 normalizedMessage += lineBreak;
             }
@@ -58,7 +69,7 @@ namespace S2.Munin.Service
             {
                 NetworkStream stream = client.GetStream();
 
-                this.WriteMessage(stream, string.Format(greetingFormat, nodeName));
+                WriteMessage(stream, string.Format(CultureInfo.InvariantCulture, greetingFormat, nodeName));
 
                 String unprocessedInput = "";
 
@@ -80,8 +91,8 @@ namespace S2.Munin.Service
                         unprocessedInput = unprocessedInput.Substring(lineBreakMatch.Index + lineBreakMatch.Length);
                         lineBreakMatch = lineBreakPattern.Match(unprocessedInput);
 
-                        string response = this.HandleCommandLine(line);
-                        this.WriteMessage(stream, response);
+                        string response = HandleCommandLine(line);
+                        WriteMessage(stream, response);
                     }
                 }
             }
@@ -98,7 +109,7 @@ namespace S2.Munin.Service
             client.Close();
         }
 
-        protected string HandleCommandLine(string commandline)
+        protected static string HandleCommandLine(string commandline)
         {
             if (commandline == null)
             {
@@ -110,47 +121,40 @@ namespace S2.Munin.Service
                 return "";
             }
             // commands: list, nodes, config, fetch, version or quit
-            switch (argv[0].ToLowerInvariant())
+            switch (argv[0].ToUpperInvariant())
             {
-                case "quit":
+                case "QUIT":
                     throw new IOException("closing connection");
-                case "version":
-                    return this.GetVersion();
-                case "fetch":
+                case "VERSION":
+                    return Version;
+                case "FETCH":
                     if (argv.Length < 2)
                     {
                         return unknownService;
                     }
-                    return this.FetchData(argv[1]);
-                case "config":
+                    return FetchData(argv[1]);
+                case "CONFIG":
                     if (argv.Length < 2)
                     {
                         return unknownService;
                     }
-                    return this.ConfigData(argv[1]);
-                case "nodes":
-                    return string.Format("{0}\n.", nodeName);
-                case "list":
-                    return this.ListGraphs();
+                    return ConfigData(argv[1]);
+                case "NODES":
+                    return string.Format(CultureInfo.InvariantCulture, "{0}\n.", nodeName);
+                case "LIST":
+                    return ListGraphs();
                 default:
                     return "# Unknown command. Try list, nodes, config, fetch, version or quit";
             }
         }
 
-        protected string GetVersion()
-        {
-            AssemblyFileVersionAttribute versionAttribute = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyFileVersionAttribute), true).FirstOrDefault() as AssemblyFileVersionAttribute;
-            string version = (versionAttribute == null) ? "unkown" : versionAttribute.Version;
-            return string.Format(versionFormat, nodeName, version);
-        }
-
-        protected string FetchData(string graphId)
+        protected static string FetchData(string graphId)
         {
             if (string.IsNullOrEmpty(graphId))
             {
                 return unknownService;
             }
-            foreach (IMuninPlugin plugin in PluginHelper.loadedPlugins)
+            foreach (IMuninPlugin plugin in PluginHelper.LoadedPlugins)
             {
                 if (plugin.GetGraphs().Contains(graphId))
                 {
@@ -160,13 +164,13 @@ namespace S2.Munin.Service
             return unknownService;
         }
 
-        protected string ConfigData(string graphId)
+        protected static string ConfigData(string graphId)
         {
             if (string.IsNullOrEmpty(graphId))
             {
                 return unknownService;
             }
-            foreach (IMuninPlugin plugin in PluginHelper.loadedPlugins)
+            foreach (IMuninPlugin plugin in PluginHelper.LoadedPlugins)
             {
                 if (plugin.GetGraphs().Contains(graphId))
                 {
@@ -176,10 +180,10 @@ namespace S2.Munin.Service
             return unknownService;
         }
 
-        protected string ListGraphs()
+        protected static string ListGraphs()
         {
             List<string> graphList = new List<string>();
-            foreach (IMuninPlugin plugin in PluginHelper.loadedPlugins)
+            foreach (IMuninPlugin plugin in PluginHelper.LoadedPlugins)
             {
                 foreach (string graph in plugin.GetGraphs())
                 {
