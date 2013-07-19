@@ -17,6 +17,7 @@ namespace S2.Munin.Debug
             int muninPort = 4950;
             string bindAddress = "";
 
+            Utils.CheckIniFile();
             FileInfo file = new FileInfo(Assembly.GetExecutingAssembly().Location);
             string settingsPath = Path.Combine(file.Directory.FullName, Constants.IniFileName);
 

@@ -13,6 +13,7 @@ namespace S2.Munin.Service
         /// </summary>
         static void Main()
         {
+            Utils.CheckIniFile();
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
 			{ 

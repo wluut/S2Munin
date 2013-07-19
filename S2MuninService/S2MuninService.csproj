@@ -63,12 +63,6 @@
     <Compile Include="MuninConnection.cs" />
     <Compile Include="PluginHelper.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProjectInstaller.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="ProjectInstaller.Designer.cs">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="S2MuninService.cs">
       <SubType>Component</SubType>
@@ -76,6 +70,7 @@
     <Compile Include="S2MuninService.Designer.cs">
       <DependentUpon>S2MuninService.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\S2MuninPlugin\S2MuninPlugin.csproj">
@@ -84,15 +79,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ProjectInstaller.resx">
-      <DependentUpon>ProjectInstaller.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="S2MuninService.resx">
       <DependentUpon>S2MuninService.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="S2Munin.ini">
+    <Content Include="S2Munin-default.ini">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
