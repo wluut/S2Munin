@@ -6,7 +6,7 @@
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+        <MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="Complete" Title="S2Munin" Description="The complete package" Display="expand" ConfigurableDirectory='INSTALLDIR' Level="1">
             <Feature Id="Service" Title="Service" Description="The service" Level="1">
@@ -30,6 +30,7 @@
         </Condition>
         <Icon Id="munin.ico" SourceFile="$(var.S2MuninService.TargetPath)"/>
         <Property Id="ARPPRODUCTICON" Value="munin.ico" />
+        <!--
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
         <UIRef Id="WixUI_ErrorProgressText" />
         <UIRef Id="WixUI_Common" />
@@ -82,7 +83,8 @@
         </UI>
         <WixVariable Id="WixUIDialogBmp" Value="Data\dialog.bmp" />
         <WixVariable Id="WixUIBannerBmp" Value="Data\banner.bmp" />
-	</Product>
+        -->
+    </Product>
 
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
