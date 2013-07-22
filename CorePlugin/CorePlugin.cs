@@ -17,6 +17,8 @@ namespace S2.Munin.Plugins.Core
 
         public string PluginName { get { return "Core"; } }
 
+        public ILogger Logger { private get; set; }
+
         public bool Initialize(IDictionary<string, string> settings)
         {
             // configuration values

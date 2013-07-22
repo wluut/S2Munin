@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension" xmlns:fw="http://schemas.microsoft.com/wix/FirewallExtension">
     <?define ServiceName="S2MuninService" ?>
-    <?define InstallVersion="1.0.2" ?>
+    <?define InstallVersion="1.0.3" ?>
 	<Product Id="*" Name="S2 Munin" Language="1033" Version="$(var.InstallVersion)" Manufacturer="SinnerSchrader Deutschland GmbH" UpgradeCode="13c61805-a43c-44d1-b264-25a354574c6b">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
 
@@ -117,6 +117,9 @@
             </Component>
             <Component Id="S2MuninIni" Win64="yes">
                 <File KeyPath="yes" Source="$(var.S2MuninService.ProjectDir)\S2Munin-default.ini" />
+            </Component>
+            <Component Id="log4net" Win64="yes">
+                <File Source="$(var.S2MuninService.TargetDir)\log4net.dll" />
             </Component>
             <Component Id="S2MuninPlugin" Win64="yes">
                 <File Source="$(var.S2MuninPlugin.TargetPath)" />

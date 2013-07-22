@@ -39,12 +39,12 @@ namespace S2.Munin.Service
                 }
                 catch (IOException ioe)
                 {
-                    Logger.Error("could not load plugin " + pluginFile.Name, ioe);
+                    Logger.Instance.Error("could not load plugin " + pluginFile.Name, ioe);
                     continue;
                 }
                 catch (BadImageFormatException bife)
                 {
-                    Logger.Error("could not load plugin " + pluginFile.Name, bife);
+                    Logger.Instance.Error("could not load plugin " + pluginFile.Name, bife);
                     continue;
                 }
 
@@ -60,6 +60,8 @@ namespace S2.Munin.Service
                     {
                         IMuninPlugin plugin = Activator.CreateInstance(type) as IMuninPlugin;
 
+                        plugin.Logger = new Logger(plugin.PluginName);
+
                         IDictionary<string, string> pluginSettings = GetSettings(plugin.PluginName);
                         if (plugin.Initialize(pluginSettings))
                         {
@@ -68,7 +70,7 @@ namespace S2.Munin.Service
                     }
                     catch (Exception e)
                     {
-                        Logger.Error("error loading plugin " + type.FullName + " from " + pluginFile.Name, e);
+                        Logger.Instance.Error("error loading plugin " + type.FullName + " from " + pluginFile.Name, e);
                     }
                 }
             }
@@ -101,7 +103,7 @@ namespace S2.Munin.Service
             }
             catch (Exception e)
             {
-                Logger.Error("error reading settings", e);
+                Logger.Instance.Error("error reading settings", e);
             }
             return settings;
         }

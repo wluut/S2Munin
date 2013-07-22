@@ -16,6 +16,8 @@ namespace S2.Munin.Plugins.PowerShell
 
         public string PluginName { get { return "PowerShell"; } }
 
+        public ILogger Logger { private get; set; }
+
         public bool Initialize(IDictionary<string, string> settings)
         {
             foreach (KeyValuePair<string, string> entry in settings)

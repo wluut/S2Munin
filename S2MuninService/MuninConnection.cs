@@ -102,7 +102,7 @@ namespace S2.Munin.Service
             }
             catch (Exception e)
             {
-                Logger.Error("error handling connection", e);
+                Logger.Instance.Error("error handling connection", e);
             }
 
             // Shutdown and end connection

@@ -13,6 +13,11 @@ namespace S2.Munin.Plugin
         string PluginName { get; }
 
         /// <summary>
+        /// Logger for Logging
+        /// </summary>
+        ILogger Logger { set; }
+
+        /// <summary>
         /// Initialize Plugin with Settings
         /// </summary>
         /// <param name="settings">The Settings from the INI file</param>

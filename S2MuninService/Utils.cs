@@ -26,7 +26,7 @@ namespace S2.Munin.Service
             }
             catch (Exception e)
             {
-                Logger.Error("error checking settings", e);
+                Logger.Instance.Error("error checking settings", e);
             }
         }
     }

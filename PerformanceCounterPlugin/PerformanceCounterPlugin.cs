@@ -16,6 +16,8 @@ namespace S2.Munin.Plugins.PerformanceCounter
 
         public string PluginName { get { return "PerformanceCounter"; } }
 
+        public ILogger Logger { private get; set; }
+
         public bool Initialize(IDictionary<string, string> settings)
         {
             // split settings into single graphs

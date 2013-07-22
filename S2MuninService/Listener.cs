@@ -53,7 +53,7 @@ namespace S2.Munin.Service
                 }
                 catch (Exception e)
                 {
-                    Logger.Error("Connection Error", e);
+                    Logger.Instance.Error("Connection Error", e);
                 }
             }
             this.tcpListener.Stop();
