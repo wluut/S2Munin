@@ -30,7 +30,7 @@ namespace S2.Munin.Debug
                 {
                     if (!int.TryParse(iniPort, out muninPort))
                     {
-                        Logger.ErrorFormat("could not parse port \"{0}\", defaulting to {1}", iniPort, muninPort);
+                        Logger.Instance.ErrorFormat("could not parse port \"{0}\", defaulting to {1}", iniPort, muninPort);
                     }
                 }
                 string iniBindAdress = ini.GetEntryValue(Constants.IniGlobalSection, Constants.IniBindKey) as string;
