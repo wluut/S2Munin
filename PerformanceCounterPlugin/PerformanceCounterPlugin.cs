@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 using S2.Munin.Plugin;
 
@@ -17,6 +18,10 @@ namespace S2.Munin.Plugins.PerformanceCounter
         public string PluginName { get { return "PerformanceCounter"; } }
 
         public ILogger Logger { private get; set; }
+
+        private Timer refreshCounterTimer = null;
+
+        private IList<GraphCounter> refetchCounterList = new List<GraphCounter>();
 
         public bool Initialize(IDictionary<string, string> settings)
         {
@@ -52,6 +57,7 @@ namespace S2.Munin.Plugins.PerformanceCounter
                 Graph graph = new Graph();
                 graph.Arguments = new Dictionary<string, string>();
                 graph.Counter = new Dictionary<string, GraphCounter>();
+                graph.KeepCounter = true;
 
                 foreach (KeyValuePair<string, string> entry in subsettings)
                 {
@@ -59,6 +65,16 @@ namespace S2.Munin.Plugins.PerformanceCounter
                     if (!match.Success)
                     {
                         // no "." => graph argument
+                        if (entry.Key == "keepcounter")
+                        {
+                            bool keep;
+                            if (bool.TryParse(entry.Value, out keep))
+                            {
+                                graph.KeepCounter = keep;
+                            }
+                            continue;
+                        }
+
                         graph.Arguments.Add(entry.Key, entry.Value);
                         continue;
                     }
@@ -79,7 +95,8 @@ namespace S2.Munin.Plugins.PerformanceCounter
                     }
                     if (counterArgument == "counter")
                     {
-                        counter.PerformanceCounter = GetPerformanceCounter(entry.Value);
+                        counter.CounterPath = entry.Value;
+                        counter.PerformanceCounter = this.GetPerformanceCounter(entry.Value);
                         continue;
                     }
                     counter.Arguments.Add(counterArgument, entry.Value);
@@ -87,15 +104,29 @@ namespace S2.Munin.Plugins.PerformanceCounter
                     {
                         counter.FloatValue = (entry.Value.ToUpperInvariant() == "GAUGE");
                     }
-                   
+
                 }
                 // cleanup
                 List<string> missing = new List<string>();
                 foreach (KeyValuePair<string, GraphCounter> entry in graph.Counter)
                 {
-                    if (entry.Value.PerformanceCounter == null)
+                    if (entry.Value.CounterPath == null)
                     {
                         missing.Add(entry.Key);
+                    }
+                    else if (entry.Value.PerformanceCounter == null)
+                    {
+                        if (graph.KeepCounter)
+                        {
+                            lock (this.refetchCounterList)
+                            {
+                                this.refetchCounterList.Add(entry.Value);
+                            }
+                        }
+                        else
+                        {
+                            missing.Add(entry.Key);
+                        }
                     }
                 }
                 foreach (string counterName in missing)
@@ -107,7 +138,14 @@ namespace S2.Munin.Plugins.PerformanceCounter
                     this.graphs.Add(graphName, graph);
                 }
             }
-            return this.graphs.Count > 0;
+            if (this.graphs.Count == 0)
+            {
+                return false;
+            }
+
+            this.refreshCounterTimer = new Timer(new TimerCallback(RefreshPerformanceCounter), null, 60 * 1000, 60 * 1000);
+
+            return true;
         }
 
         public IList<string> GetGraphs()
@@ -146,26 +184,46 @@ namespace S2.Munin.Plugins.PerformanceCounter
             StringBuilder values = new StringBuilder();
             foreach (KeyValuePair<string, GraphCounter> counter in graph.Counter)
             {
-                if (counter.Value.FloatValue)
+                string counterValue = "U";
+                if (counter.Value.PerformanceCounter != null)
                 {
-                    values.AppendFormat(CultureInfo.InvariantCulture, "{0}.value {1}\n", counter.Key, counter.Value.PerformanceCounter.NextValue());
+                    float value;
+                    try
+                    {
+                        value = counter.Value.PerformanceCounter.NextValue();
+                        if (counter.Value.FloatValue)
+                        {
+                            counterValue = value.ToString(CultureInfo.InvariantCulture);
+                        }
+                        else
+                        {
+                            counterValue = ((ulong)value).ToString(CultureInfo.InvariantCulture);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        lock (this.refetchCounterList)
+                        {
+                            counter.Value.PerformanceCounter = null;
+                            refetchCounterList.Add(counter.Value);
+                        }
+                        this.Logger.Error(string.Format(CultureInfo.InvariantCulture, "error fetching next value from performance counter \"{0}\"", counter.Value.CounterPath), e);
+                    }
                 }
-                else
-                {
-                    ulong value = (ulong)counter.Value.PerformanceCounter.NextValue();
-                    values.AppendFormat(CultureInfo.InvariantCulture, "{0}.value {1}\n", counter.Key, value);
-                }
+                values.AppendFormat(CultureInfo.InvariantCulture, "{0}.value {1}\n", counter.Key, counterValue);
             }
             return values.ToString();
         }
 
         public void StopPlugin()
         {
-            // nothing to do
+            if (this.refreshCounterTimer != null)
+            {
+                this.refreshCounterTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            }
         }
 
-
-        private static System.Diagnostics.PerformanceCounter GetPerformanceCounter(string path)
+        private System.Diagnostics.PerformanceCounter GetPerformanceCounter(string path)
         {
             // check if performance counter path exists
             string host = null;
@@ -238,8 +296,52 @@ namespace S2.Munin.Plugins.PerformanceCounter
             {
                 performanceCounter = category.GetCounters().Where(pc => pc.CounterName == counterPath).FirstOrDefault();
             }
-            performanceCounter.NextValue();
+            try
+            {
+                performanceCounter.NextValue();
+            }
+            catch (Exception e)
+            {
+                this.Logger.Error(string.Format(CultureInfo.InvariantCulture, "error fetching next value from performance counter \"{0}\"", path), e);
+            }
             return performanceCounter;
+        }
+
+        private void RefreshPerformanceCounter(object o)
+        {
+            lock (this.refetchCounterList)
+            {
+                if (this.refetchCounterList.Count == 0)
+                {
+                    return;
+                }
+
+                List<GraphCounter> workList = new List<GraphCounter>();
+                workList.AddRange(this.refetchCounterList);
+                this.refetchCounterList.Clear();
+
+                foreach (GraphCounter counter in workList)
+                {
+                    counter.PerformanceCounter = this.GetPerformanceCounter(counter.CounterPath);
+                    if (counter.PerformanceCounter == null)
+                    {
+                        this.refetchCounterList.Add(counter);
+                    }
+                    else
+                    {
+                        try
+                        {
+                            counter.PerformanceCounter.NextValue();
+                        }
+                        catch (Exception e)
+                        {
+                            counter.PerformanceCounter = null;
+                            this.refetchCounterList.Add(counter);
+                            this.Logger.Error(string.Format(CultureInfo.InvariantCulture, "error fetching next value from performance counter \"{0}\"", counter.CounterPath), e);
+                        }
+                    }
+                }
+            }
         }
     }
 }

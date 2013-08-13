@@ -9,5 +9,6 @@ namespace S2.Munin.Plugins.PerformanceCounter
     {
         public IDictionary<string, string> Arguments { get; set; }
         public IDictionary<string, GraphCounter> Counter { get; set; }
+        public bool KeepCounter { get; set; }
     }
 }
