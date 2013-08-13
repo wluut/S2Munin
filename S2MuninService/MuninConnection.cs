@@ -19,6 +19,7 @@ namespace S2.Munin.Service
         private const string greetingFormat = "# s2 munin node at {0}";
         private const string versionFormat = "# s2 munin on host {0} version: {1}";
         private const string unknownService = "# unknown service\n.";
+        private const string errorMessage = "# error, try again later\n.";
         private const string lineBreak = "\n";
         private static readonly Regex lineBreakPattern = new Regex("\\r?\\n\\r?");
 
@@ -132,17 +133,38 @@ namespace S2.Munin.Service
                     {
                         return unknownService;
                     }
-                    return FetchData(argv[1]);
+                    try
+                    {
+                        return FetchData(argv[1]);
+                    }
+                    catch (Exception)
+                    {
+                        return errorMessage;
+                    }
                 case "CONFIG":
                     if (argv.Length < 2)
                     {
                         return unknownService;
                     }
-                    return ConfigData(argv[1]);
+                    try
+                    {
+                        return ConfigData(argv[1]);
+                    }
+                    catch (Exception)
+                    {
+                        return errorMessage;
+                    }
                 case "NODES":
                     return string.Format(CultureInfo.InvariantCulture, "{0}\n.", nodeName);
                 case "LIST":
-                    return ListGraphs();
+                    try
+                    {
+                        return ListGraphs();
+                    }
+                    catch (Exception)
+                    {
+                        return errorMessage;
+                    }
                 default:
                     return "# Unknown command. Try list, nodes, config, fetch, version or quit";
             }
