@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension" xmlns:fw="http://schemas.microsoft.com/wix/FirewallExtension">
     <?define ServiceName="S2MuninService" ?>
-    <?define InstallVersion="1.0.3" ?>
+    <?define InstallVersion="!(bind.FileVersion.S2MuninServiceExe)" ?>
 	<Product Id="*" Name="S2 Munin" Language="1033" Version="$(var.InstallVersion)" Manufacturer="SinnerSchrader Deutschland GmbH" UpgradeCode="13c61805-a43c-44d1-b264-25a354574c6b">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
 
@@ -101,7 +101,7 @@
 	<Fragment>
 		<ComponentGroup Id="ServiceBase" Directory="INSTALLDIR">
             <Component Id="S2MuninService" Win64="yes">
-                <File Source="$(var.S2MuninService.TargetPath)" />
+                <File Id="S2MuninServiceExe" Source="$(var.S2MuninService.TargetPath)" />
                 <fw:FirewallException Id="S2MuninFW" Name="S2Munin" Port="4949" Scope="any" />
                 <ServiceInstall
                     Id="ServiceInstaller"
