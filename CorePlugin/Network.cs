@@ -27,7 +27,9 @@ namespace S2.Munin.Plugins.Core
 
             IList<string> interfaces = mos.Get()
                                                   .Cast<ManagementObject>()
-                                                  .OrderBy(p => Convert.ToUInt32(p.Properties["Index"].Value, CultureInfo.InvariantCulture)).Select(p => p.Properties["Description"].Value as string)
+                                                  .OrderBy(p => Convert.ToUInt32(p.Properties["Index"].Value, CultureInfo.InvariantCulture))
+                                                  .Select(p => p.Properties["Description"].Value as string)
+                                                  .Distinct()
                                                   .ToList();
 
             List<string> graphNames = new List<string>();
