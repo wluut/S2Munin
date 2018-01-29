@@ -70,7 +70,7 @@ namespace S2.Munin.Plugins.Core
             {
                 configuration.Append("graph_title Used disk space\n");
             }
-            configuration.Append("graph_args -l 0 --upper-limit 100\n");
+            configuration.Append("graph_args --lower-limit 0 --upper-limit 100 --rigid\n");
             configuration.Append("graph_vlabel percent\n");
             configuration.Append("graph_category disk\n");
             configuration.AppendFormat("graph_order {0}\n", string.Join(" ", graphOrder.ToArray()));
